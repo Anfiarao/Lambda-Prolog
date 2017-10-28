@@ -87,17 +87,17 @@ spy    (conv TY' TY).
 of X Y _ :-  locDecl X Y .
 
 
-pippoequ A A T H'
+tauequ A A T H'
     :- trad_isa A T Ai
     ,  reflu T H
     ,  H' = H Ai
     .
-pippoequ A B T Hi
+tauequ A B T Hi
     :- spy(locDecl H (propEq T' A B)), !
     ,  spy(trad_isa H (propEq T A B) Hi)
     .
 
-pippoequ A B T Hi
+tauequ A B T Hi
     :- (locDecl H (propEq T' B A))
     ,  spy(trad_isa H (propEq T B A) Hi')
     ,  spy (symmu T Q)
@@ -106,16 +106,16 @@ pippoequ A B T Hi
 
 
 
-pippo A A (x \ x) :- !.
+tau A A (x \ x) :- !.
 
-pippo_trasp A A (x\y\h\ h) :- !.
+tau_trasp A A (x\y\h\ h) :- !.
 
 
 %traduce X:_ext T in un Xi di tipi Ti
 trad_isa X T Xi 
         :- spy(of X T_inf ext)
         ,  spy(trad X Xi')
-        ,  spy(pippo T_inf T F)
+        ,  spy(tau T_inf T F)
         ,  spy(Xi = F Xi')
         .
 
@@ -135,7 +135,7 @@ symmu T (x\ fixMe "prova di symmetria").
 % il tipo intensionale può variare per lo stesso elemento estensionale
 
 
-% supponiamo che conv X Y per poter usare pippoequ X Y H
+% supponiamo che conv X Y per poter usare tauequ X Y H
 %       H è la prova che i tradotti siano uguali nel loro setoide
 
 
