@@ -87,17 +87,17 @@ spy    (conv TY' TY).
 of X Y _ :-  locDecl X Y .
 
 
-tauequ A A T H'
+proove_setoid_eq A A T H'
     :- trad_isa A T Ai
     ,  reflu T H
     ,  H' = H Ai
     .
-tauequ A B T Hi
+proove_setoid_eq A B T Hi
     :- spy(locDecl H (propEq T' A B)), !
     ,  spy(trad_isa H (propEq T A B) Hi)
     .
 
-tauequ A B T Hi
+proove_setoid_eq A B T Hi
     :- (locDecl H (propEq T' B A))
     ,  spy(trad_isa H (propEq T B A) Hi')
     ,  spy (symmu T Q)
@@ -123,7 +123,7 @@ locDecl (k_propId Te) (forall T t1\ forall T t1'\
         implies (E t1 t1') (forall T t2\ forall T t2'\ 
                 implies (E t2 t2') (implies (E t1 t2) (E t1' t2'))) )
                 :- trad Te T
-                ,  equ Te E
+                ,  setoid_eq Te E
                 .
 
  
@@ -135,7 +135,7 @@ symmu T (x\ fixMe "prova di symmetria").
 % il tipo intensionale può variare per lo stesso elemento estensionale
 
 
-% supponiamo che conv X Y per poter usare tauequ X Y H
+% supponiamo che conv X Y per poter usare proove_setoid_eq X Y H
 %       H è la prova che i tradotti siano uguali nel loro setoide
 
 
