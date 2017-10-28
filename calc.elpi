@@ -47,7 +47,7 @@ dconv (and B C) (and B' C')
 
 type colSigma mttType -> (mttTerm -> mttType) -> mttType.
 type pair mttType ->  (mttTerm -> mttType) -> mttTerm -> mttTerm -> mttTerm.
-type elim_Sigmaigma mttTerm -> (mttTerm -> mttType) -> (mttTerm -> mttTerm -> mttTerm) -> mttTerm.
+type elim_Sigma mttTerm -> (mttTerm -> mttType) -> (mttTerm -> mttTerm -> mttTerm) -> mttTerm.
 
 
 isType (colSigma B C) KIND IE 
@@ -63,7 +63,7 @@ of (pair B C BB CC) (colSigma B C) IE
     ,  isa CC (C BB) IE
     .
 
-of (elim_Sigmaigma Pair M MM) (M Pair) IE 
+of (elim_Sigma Pair M MM) (M Pair) IE 
     :- spy (of Pair (colSigma B C) IE)
     ,  spy (pi z \ locDecl z (colSigma B C) => isType (M z) _ IE)
     ,  spy (pi x \ pi y \
@@ -71,7 +71,7 @@ of (elim_Sigmaigma Pair M MM) (M Pair) IE
                 isa (MM x y) (M (pair B C x y)) IE )
     .
 
-hstep (elim_Sigmaigma Pair M Mm) (Mm Bb Cc) 
+hstep (elim_Sigma Pair M Mm) (Mm Bb Cc) 
     :- spy(hnf Pair (pair B C Bb Cc))
     ,  spy(isa Bb B _)
     ,  spy(isa Cc (C Bb) _)
@@ -90,7 +90,7 @@ dconv (pair B C BB CC) (pair B' C' BB' CC')
     ,  (conv CC CC')
     .
 
-dconv (elim_Sigmaigma Pair M MM) (elim_Sigmaigma Pair' M' MM') 
+dconv (elim_Sigma Pair M MM) (elim_Sigma Pair' M' MM') 
     :- (conv Pair Pair')
     ,  (of Pair (colSigma B C))
     ,  (pi z\ locDecl z (colSigma B C) => conv (M z) (M' z))
@@ -541,7 +541,7 @@ trad (app F X) R
     ,  spy(trad F Fi)
     ,  spy(of Fi T int)
     ,  spy(T = (colSigma PI _))
-    ,  R = (app (elim_Sigmaigma Fi (_\PI) (x\y\x) ) Xi)
+    ,  R = (app (elim_Sigma Fi (_\PI) (x\y\x) ) Xi)
     .
 
 
@@ -567,8 +567,8 @@ equ (setPi B C) P
     ,  P = (f\ g\ 
         forall Bi x\ 
             EquC x 
-            (app (elim_Sigmaigma f (_\setPi Bi Ci) (x\y\x) ) x) 
-            (app (elim_Sigmaigma g (_\setPi Bi Ci) (x\y\x) ) x))
+            (app (elim_Sigma f (_\setPi Bi Ci) (x\y\x) ) x) 
+            (app (elim_Sigma g (_\setPi Bi Ci) (x\y\x) ) x))
     .
 
 pippoequ (app F X1) (app F X2) T H 
@@ -576,8 +576,8 @@ pippoequ (app F X1) (app F X2) T H
     ,  spy(pippoequ X1 X2 B G)
     ,  spy(trad F Fi)
     ,  spy(of Fi (colSigma TyF MorF) int)
-    ,  PI1 = (c\ elim_Sigmaigma c (_\ TyF) (x \ y\ x))
-    ,  P2Fi = elim_Sigmaigma Fi (c \ MorF (PI1 c)) (x\ y\ y)
+    ,  PI1 = (c\ elim_Sigma c (_\ TyF) (x \ y\ x))
+    ,  P2Fi = elim_Sigma Fi (c \ MorF (PI1 c)) (x\ y\ y)
     ,  spy(trad_isa X1 B X1i)
     ,  spy(trad_isa X2 B X2i)
     ,  spy(pippo  (propEq (T' X2) (app F X1) (app F X2))
@@ -599,7 +599,7 @@ pippo (setPi B C) (setPi B' C') P
     ,  spy(pippo_trasp B' B KB)
     ,  spy(macro_pippo B B' x\x'\_\xi\xi'\hi\ pippo_trasp (C x) (C' x') (KC' xi xi' hi))
     ,  P = 
-        (w\ elim_Sigmaigma w (_\colSigma T1' T2')
+        (w\ elim_Sigma w (_\colSigma T1' T2')
             f\p\ pair T1' T2'
                 (lambda Bi' x\ FC' (FB x) x (app f (FB x)))
                 (forall_lam Bi' y1'\ forall_lam Bi' y2'\ forall_lam (EquB' y1' y2') d'\
