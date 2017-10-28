@@ -41,22 +41,22 @@ dconv (p1_and Pair) (p1_and Pair')
 dconv (and B C) (and B' C') 
     :- (conv B B')
     ,  (conv C C')
-    .%%-- calc/colSigma.elpi
+    .%%-- calc/setSigma.elpi
 
 %% STRONG INDEXED COL SUM
 
-type colSigma mttType -> (mttTerm -> mttType) -> mttType.
+type setSigma mttType -> (mttTerm -> mttType) -> mttType.
 type pair mttType ->  (mttTerm -> mttType) -> mttTerm -> mttTerm -> mttTerm.
 type elim_setSigma mttTerm -> (mttTerm -> mttType) -> (mttTerm -> mttTerm -> mttTerm) -> mttTerm.
 
 
-isType (colSigma B C) KIND IE 
+isType (setSigma B C) KIND IE 
     :- spy(isType B KIND1 IE)
     ,  spy(pi b\ locDecl b B => isType (C b) KIND2 IE)
     ,  (pts_fun KIND1 KIND2 KIND)
     .
 
-of (pair B C BB CC) (colSigma B C) IE 
+of (pair B C BB CC) (setSigma B C) IE 
     :- isType B _ IE
     ,  isType (C BB) _ IE
     ,  isa BB B IE
@@ -64,8 +64,8 @@ of (pair B C BB CC) (colSigma B C) IE
     .
 
 of (elim_setSigma Pair M MM) (M Pair) IE 
-    :- spy (of Pair (colSigma B C) IE)
-    ,  spy (pi z \ locDecl z (colSigma B C) => isType (M z) _ IE)
+    :- spy (of Pair (setSigma B C) IE)
+    ,  spy (pi z \ locDecl z (setSigma B C) => isType (M z) _ IE)
     ,  spy (pi x \ pi y \
             locDecl x B => locDecl y (C x) =>  
                 isa (MM x y) (M (pair B C x y)) IE )
@@ -75,14 +75,14 @@ hstep (elim_setSigma Pair M Mm) (Mm Bb Cc)
     :- spy(hnf Pair (pair B C Bb Cc))
     ,  spy(isa Bb B _)
     ,  spy(isa Cc (C Bb) _)
-    ,  spy(pi z\ locDecl z (colSigma B C) => isType (M z) _ IE)
+    ,  spy(pi z\ locDecl z (setSigma B C) => isType (M z) _ IE)
     ,  spy(pi x \ pi y \
         locDecl x B  => locDecl y (C x) =>  
             isa (Mm x y) (M (pair B C x y))  IE)
     .
 
 
-dconv (colSigma B C) (colSigma B' C') :- (conv B B'), (pi x\ locDecl x B => conv (C x) (C' x)).
+dconv (setSigma B C) (setSigma B' C') :- (conv B B'), (pi x\ locDecl x B => conv (C x) (C' x)).
 dconv (pair B C BB CC) (pair B' C' BB' CC') 
     :- (conv B B')
     ,  (pi x\ locDecl x B => conv (C x) (C' x))
@@ -92,8 +92,8 @@ dconv (pair B C BB CC) (pair B' C' BB' CC')
 
 dconv (elim_setSigma Pair M MM) (elim_setSigma Pair' M' MM') 
     :- (conv Pair Pair')
-    ,  (of Pair (colSigma B C))
-    ,  (pi z\ locDecl z (colSigma B C) => conv (M z) (M' z))
+    ,  (of Pair (setSigma B C))
+    ,  (pi z\ locDecl z (setSigma B C) => conv (M z) (M' z))
     ,  (pi x\ pi y\  locDecl x B => locDecl y (C x) => conv (MM x y) (MM' x y))
     .
 %% calc_Eq.elpi
@@ -519,7 +519,7 @@ trad (setPi B C) T
         => (locDecl hi (EquB x1i x2i))
         => trad h hi
         => spy(pippo (C x1) (C x2) (PippoC x1i x2i hi)))
-    ,  T = colSigma (setPi Bi Ci) f\ (forall (Bi) x1\ (forall Bi x2\ (forall (EquB x1 x2) h\
+    ,  T = setSigma (setPi Bi Ci) f\ (forall (Bi) x1\ (forall Bi x2\ (forall (EquB x1 x2) h\
     (
             EquC x2 
             (
@@ -540,14 +540,14 @@ trad (app F X) R
     ,  spy(trad_isa X B Xi)
     ,  spy(trad F Fi)
     ,  spy(of Fi T int)
-    ,  spy(T = (colSigma PI _))
+    ,  spy(T = (setSigma PI _))
     ,  R = (app (elim_setSigma Fi (_\PI) (x\y\x) ) Xi)
     .
 
 
 trad (lambda B F) R                
     :- spy(of (lambda B F) (setPi B C) ext)
-    ,  spy(trad (setPi B C) (colSigma (setPi Bi Ci) H ))
+    ,  spy(trad (setPi B C) (setSigma (setPi Bi Ci) H ))
     ,  macro_trad B ( x\_\_\xi\_\_\ trad (F x) (Fi xi))
     ,  equ B EquB
     ,  macro_trad B (x1\x2\h\x1i\x2i\hi\pippoequ (F x1) (F x2) (C x2) (K_EQU x1i x2i hi))
@@ -575,7 +575,7 @@ pippoequ (app F X1) (app F X2) T H
     :- of F (setPi B T') ext
     ,  spy(pippoequ X1 X2 B G)
     ,  spy(trad F Fi)
-    ,  spy(of Fi (colSigma TyF MorF) int)
+    ,  spy(of Fi (setSigma TyF MorF) int)
     ,  PI1 = (c\ elim_setSigma c (_\ TyF) (x \ y\ x))
     ,  P2Fi = elim_setSigma Fi (c \ MorF (PI1 c)) (x\ y\ y)
     ,  spy(trad_isa X1 B X1i)
@@ -586,9 +586,9 @@ pippoequ (app F X1) (app F X2) T H
     . 
 
 pippo (setPi B C) (setPi B' C') P
-    :- spy(trad (setPi B C) (colSigma T1 T2))
+    :- spy(trad (setPi B C) (setSigma T1 T2))
     ,  spy(T1 = setPi Bi Ci)
-    ,  spy(trad (setPi B' C') (colSigma T1' T2'))
+    ,  spy(trad (setPi B' C') (setSigma T1' T2'))
     ,  spy(T1' = setPi Bi' Ci')
     ,  spy(equ B' EquB')
     ,  spy(macro_trad B (_\x2\_\_\x2i\_\ equ (C x2) (EquC x2i)))
@@ -599,7 +599,7 @@ pippo (setPi B C) (setPi B' C') P
     ,  spy(pippo_trasp B' B KB)
     ,  spy(macro_pippo B B' x\x'\_\xi\xi'\hi\ pippo_trasp (C x) (C' x') (KC' xi xi' hi))
     ,  P = 
-        (w\ elim_setSigma w (_\colSigma T1' T2')
+        (w\ elim_setSigma w (_\setSigma T1' T2')
             f\p\ pair T1' T2'
                 (lambda Bi' x\ FC' (FB x) x (app f (FB x)))
                 (forall_lam Bi' y1'\ forall_lam Bi' y2'\ forall_lam (EquB' y1' y2') d'\
