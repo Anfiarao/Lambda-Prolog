@@ -47,7 +47,11 @@ dconv (and B C) (and B' C')
 
 type setSigma mttType -> (mttTerm -> mttType) -> mttType.
 type pair mttType ->  (mttTerm -> mttType) -> mttTerm -> mttTerm -> mttTerm.
+<<<<<<< HEAD
 type elim_setSigma mttTerm -> (mttTerm -> mttType) -> (mttTerm -> mttTerm -> mttTerm) -> mttTerm.
+=======
+type elim_Sigma mttTerm -> (mttTerm -> mttType) -> (mttTerm -> mttTerm -> mttTerm) -> mttTerm.
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
 
 
 isType (setSigma B C) KIND IE 
@@ -63,15 +67,25 @@ of (pair B C BB CC) (setSigma B C) IE
     ,  isa CC (C BB) IE
     .
 
+<<<<<<< HEAD
 of (elim_setSigma Pair M MM) (M Pair) IE 
     :- spy (of Pair (setSigma B C) IE)
     ,  spy (pi z \ locDecl z (setSigma B C) => isType (M z) _ IE)
+=======
+of (elim_Sigma Pair M MM) (M Pair) IE 
+    :- spy (of Pair (colSigma B C) IE)
+    ,  spy (pi z \ locDecl z (colSigma B C) => isType (M z) _ IE)
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
     ,  spy (pi x \ pi y \
             locDecl x B => locDecl y (C x) =>  
                 isa (MM x y) (M (pair B C x y)) IE )
     .
 
+<<<<<<< HEAD
 hstep (elim_setSigma Pair M Mm) (Mm Bb Cc) 
+=======
+hstep (elim_Sigma Pair M Mm) (Mm Bb Cc) 
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
     :- spy(hnf Pair (pair B C Bb Cc))
     ,  spy(isa Bb B _)
     ,  spy(isa Cc (C Bb) _)
@@ -90,7 +104,11 @@ dconv (pair B C BB CC) (pair B' C' BB' CC')
     ,  (conv CC CC')
     .
 
+<<<<<<< HEAD
 dconv (elim_setSigma Pair M MM) (elim_setSigma Pair' M' MM') 
+=======
+dconv (elim_Sigma Pair M MM) (elim_Sigma Pair' M' MM') 
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
     :- (conv Pair Pair')
     ,  (of Pair (setSigma B C))
     ,  (pi z\ locDecl z (setSigma B C) => conv (M z) (M' z))
@@ -540,8 +558,13 @@ trad (app F X) R
     ,  spy(trad_isa X B Xi)
     ,  spy(trad F Fi)
     ,  spy(of Fi T int)
+<<<<<<< HEAD
     ,  spy(T = (setSigma PI _))
     ,  R = (app (elim_setSigma Fi (_\PI) (x\y\x) ) Xi)
+=======
+    ,  spy(T = (colSigma PI _))
+    ,  R = (app (elim_Sigma Fi (_\PI) (x\y\x) ) Xi)
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
     .
 
 
@@ -567,17 +590,28 @@ setoid_eq (setPi B C) P
     ,  P = (f\ g\ 
         forall Bi x\ 
             EquC x 
+<<<<<<< HEAD
             (app (elim_setSigma f (_\setPi Bi Ci) (x\y\x) ) x) 
             (app (elim_setSigma g (_\setPi Bi Ci) (x\y\x) ) x))
+=======
+            (app (elim_Sigma f (_\setPi Bi Ci) (x\y\x) ) x) 
+            (app (elim_Sigma g (_\setPi Bi Ci) (x\y\x) ) x))
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
     .
 
 proove_setoid_eq (app F X1) (app F X2) T H 
     :- of F (setPi B T') ext
     ,  spy(proove_setoid_eq X1 X2 B G)
     ,  spy(trad F Fi)
+<<<<<<< HEAD
     ,  spy(of Fi (setSigma TyF MorF) int)
     ,  PI1 = (c\ elim_setSigma c (_\ TyF) (x \ y\ x))
     ,  P2Fi = elim_setSigma Fi (c \ MorF (PI1 c)) (x\ y\ y)
+=======
+    ,  spy(of Fi (colSigma TyF MorF) int)
+    ,  PI1 = (c\ elim_Sigma c (_\ TyF) (x \ y\ x))
+    ,  P2Fi = elim_Sigma Fi (c \ MorF (PI1 c)) (x\ y\ y)
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
     ,  spy(trad_isa X1 B X1i)
     ,  spy(trad_isa X2 B X2i)
     ,  spy(tau  (propEq (T' X2) (app F X1) (app F X2))
@@ -599,7 +633,11 @@ tau (setPi B C) (setPi B' C') P
     ,  spy(tau_trasp B' B KB)
     ,  spy(macro_tau B B' x\x'\_\xi\xi'\hi\ tau_trasp (C x) (C' x') (KC' xi xi' hi))
     ,  P = 
+<<<<<<< HEAD
         (w\ elim_setSigma w (_\setSigma T1' T2')
+=======
+        (w\ elim_Sigma w (_\colSigma T1' T2')
+>>>>>>> 273816f15214d25566ef16c8e49430a5c74c07d5
             f\p\ pair T1' T2'
                 (lambda Bi' x\ FC' (FB x) x (app f (FB x)))
                 (forall_lam Bi' y1'\ forall_lam Bi' y2'\ forall_lam (EquB' y1' y2') d'\
