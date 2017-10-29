@@ -139,7 +139,7 @@ interp (eqId  A Aa)  T
     ,  T = (ReflA Aa') 
     .
 reflu (propEq _ _ _) (_\id singleton star).
-equ (propEq A Aa1 Aa2) (_\ _\ (propId singleton star star)).
+setoid_eq (propEq A Aa1 Aa2) (_\ _\ (propId singleton star star)).
 
 tau (propEq T_ T1 T2) (propEq T T1' T2') (F)
     :- spy(tauequ T1 T1' T F1)
@@ -800,11 +800,6 @@ dconv (elim_setSum C W Cl Cr) (elim_setSum C' W' Cl' Cr')
 
 
 
-
-/*
-
-
-
 %%-- calc_setSum.elpi
 
 %%Disjoint Sum Type
@@ -825,28 +820,10 @@ of (elim_setSum C W Cl Cr) (CW) int :-
 hstep (elim_setSum C W Cl Cr) (Cl Wl) :- hnf W (inl A B Wl).
 hstep (elim_setSum C W Cl Cr) (Cr Wr) :- hnf W (inr A B Wr).
 
-dstep (elim_setSum C W Cl Cr) (elim_setSum C W' Cl Cr) :- dstep W W'.
-
-dstep (elim_setSum C W Cl Cr) (elim_setSum C W Cl' Cr) :- 
-    pi w\ of w (setSum A B) int => dstep (Cl w) (Cl' w).
-
-dstep (elim_setSum C W Cl Cr) (elim_setSum C W Cl Cr') :- 
-    pi w\ of w (setSum A B) int => dstep (Cr w) (Cr' w).  
-
-dstep (elim_setSum C W Cl Cr) (elim_setSum C' W Cl Cr) :- 
-    pi w\ of w (setSum A B) int => dstep (C w) (C' w).  
 
 
-dstep (inl A B AA) (inl A B AA') :- dstep AA AA'.
-dstep (inr A B BB) (inr A B BB') :- dstep BB BB'.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-*/%%-- calc_singleton.elpi
+%%-- calc_singleton.elpi
 
 %ofType star singleton set IE.
 
@@ -872,7 +849,7 @@ dconv (elim_singleton T C CC) (elim_singleton T' C' CC') :- conv T T' , conv CC 
 
 
 
-equ singleton (x\ y\ propId singleton x y).
+setoid_eq singleton (x\ y\ propId singleton x y).
 reflu singleton (x\ id singleton x).
 
 
