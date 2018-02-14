@@ -1,6 +1,3 @@
-
-
-
 ofType singleton set IE.
 
 of star singleton IE.
@@ -17,12 +14,11 @@ hstep (elim_singleton star C Cc) Cc :-
 dconv (elim_singleton T C CC) (elim_singleton T' C' CC') :- conv T T' , conv CC CC',
     (pi z\ locDecl z singleton => conv (C z) (C' z)).
 
-
-
+%% since singleton and star stay the same after translation, these are trivial
 setoid_eq singleton (x\ y\ propId singleton x y).
 setoid_refl singleton (x\ id singleton x).
 
-
+%% all tau-functions are captured by the cases in main.elpi
 
 interp singleton singleton.
 interp star star.
