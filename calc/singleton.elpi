@@ -5,27 +5,77 @@ ofType singleton set IE.
 
 of star singleton IE.
 
-of (elim_singleton Star C Cc) (C Star) IE :-
-    of Star singleton IE,
-    of Cc (C star) IE,
-    (pi z\ locDecl z singleton => ofType (C z) col IE).
+of (elim_singleton Star C Cc) (C Star) IE 
+    :- of Star singleton IE
+    ,  of Cc (C star) IE
+    ,  (pi z\ locDecl z singleton => isaType (C z) col IE)
+    .
 
-hstep (elim_singleton star C Cc) Cc :-
-    of Cc (C star) IE,
-    (pi z\ locDecl z singleton => ofType (C z) col IE ).
+hstep (elim_singleton star C Cc) Cc 
+    :- spy(of Cc (C star) IE)
+    ,  spy(pi z\ locDecl z singleton => isaType (C z) col IE )
+    .
 
 dconv (elim_singleton T C CC) (elim_singleton T' C' CC') :- conv T T' , conv CC CC',
     (pi z\ locDecl z singleton => conv (C z) (C' z)).
 
+tau_proof_eq star star singleton H 
+    :- setoid_refl singleton K
+    ,  H = K star
+    .
+%
+%Sono abbastanza sicuro che il proseguire con il metodo naive richiederebbe circa n^2 casi
+%    :- spy(macro_tau singleton singleton
+%        (x\x'\h\xi\xi'\hi\ tau (C' S') (C S) (FC xi xi' hi))
+%        )
+%    ,  spy(interp S Si)
+%    ,  spy(interp S' Si')
+%    ,  spy(tau_proof_eq S S' singleton HS)
+%    ,  spy(FC Si' Si HS (elim_singleton S' C CC') )
+%    ,  tau_proof_eq CC CC' C HCC
+%    ,  setoid
 
 
 setoid_eq singleton (x\ y\ propId singleton x y).
 setoid_refl singleton (x\ id singleton x).
-
+setoid_symm singleton P
+    :- P = (x\ y\ h\ elim_id h (a\ b\ propId singleton b a) (a\ id singleton a) )
+    ,  spy( pi x\ pi y\ pi h\ locDecl x singleton 
+        => locDecl y singleton 
+            => locDecl h (propId singleton x y) 
+                => of (P x y h) _ int
+        ) % this structure should check that the handwritten proof term P is well typed
+    . 
+    % it should help in localizing errors.
+setoid_tran singleton P 
+    :- P = (a\b\c\h\k\ 
+            impl_app 
+            (elim_id h 
+                (x\ y\ implies (propId singleton y c) (propId singleton x c)) 
+                (u\ impl_lam (propId singleton u c) (y\y) )
+            )
+            k
+    )
+    ,  spy(pi a\ pi b\ pi c\ pi h\ pi k\ 
+        locDecl a singleton => locDecl b singleton => locDecl c singleton =>
+            locDecl h (propId singleton a b) =>
+                locDecl k (propId singleton b c) =>
+                    spy(of (P a b c h k) 
+                        %(QWEQWE a b c h k) % "_" cannot be applied 
+                        (propId singleton a c) 
+                        int
+                    )
+    ).
 
 
 interp singleton singleton.
 interp star star.
+interp (elim_singleton T C CC) (elim_singleton Ti Ci CCi) 
+    :- spy(interp T Ti)
+    ,  spy(interp CC CCi)
+    ,  spy(pi x\ locDecl x singleton => spy(interp (C x) (Ci x)))
+    .
+
 
 
 
